@@ -1,7 +1,5 @@
 package com.javarush.task.task20.task2002;
 
-import sun.java2d.pipe.SpanShapeRenderer;
-
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,89 +11,135 @@ import java.util.Locale;
 Читаем и пишем в файл: JavaRush
 */
 public class Solution {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         //you can find your_file_name.tmp in your TMP directory or fix outputStream/inputStream according to your real file location
         //вы можете найти your_file_name.tmp в папке TMP или исправьте outputStream/inputStream в соответствии с путем к вашему реальному файлу
-//        try {
-            File your_file_name = File.createTempFile("/Users/Tanya/name.txt", null);
+        try {
+            //File your_file_name = File.createTempFile("your_file_name", null);
+            File your_file_name = new File("D:\\JavaProjects\\IO\\temp.txt");
             OutputStream outputStream = new FileOutputStream(your_file_name);
             InputStream inputStream = new FileInputStream(your_file_name);
 
-//            SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.ENGLISH);
-
             JavaRush javaRush = new JavaRush();
+
             //initialize users field for the javaRush object here - инициализируйте поле users для объекта javaRush тут
-//            User user = new User();
-//            user.setFirstName("Vasya");
-//            user.setLastName("Batareikin");
-//            user.setBirthDate(format.parse("01 04 1989"));
-//            user.setMale(true);
-//            user.setCountry(User.Country.RUSSIA);
-//            javaRush.users.add(user);
-//            javaRush.save(outputStream);
+            javaRush.save(outputStream);
             outputStream.flush();
+
 
             JavaRush loadedObject = new JavaRush();
             loadedObject.load(inputStream);
-            //check here that javaRush object equals to loadedObject object - проверьте тут, что javaRush и loadedObject равны
-            System.out.println(loadedObject.equals(javaRush));
 
+            //check here that javaRush object equals to loadedObject object - проверьте тут, что javaRush и loadedObject равны
+            if (loadedObject.equals(javaRush)) {
+                System.out.println("Everything is ok");
+            } else {
+                System.out.println("Objects are not identical");
+            }
 
             outputStream.close();
             inputStream.close();
 
-//        } catch (IOException e) {
-//            //e.printStackTrace();
-//            System.out.println("Oops, something wrong with my file");
-//        } catch (Exception e) {
-//            //e.printStackTrace();
-//            System.out.println("Oops, something wrong with save/load method");
-//        }
+        } catch (IOException e) {
+            //e.printStackTrace();
+            System.out.println("Oops, something wrong with my file");
+        } catch (Exception e) {
+            //e.printStackTrace();
+            System.out.println("Oops, something wrong with save/load method");
+        }
     }
 
     public static class JavaRush {
         public List<User> users = new ArrayList<>();
 
         public void save(OutputStream outputStream) throws Exception {
-            //implement this method - реализуйте этот метод
-            PrintWriter pw = new PrintWriter(outputStream);
+            OutputStream writer = outputStream;
 
-            for(User x : users){
-                pw.println(x.getFirstName());
-                pw.println(x.getLastName());
-                pw.println(Long.parseLong(String.valueOf(x.getBirthDate())));
-                pw.println(x.isMale());
-                pw.println(x.getCountry());
+            boolean isFirst = true;
+
+            SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy" , Locale.ENGLISH);
+
+            if (users.isEmpty()) {
+                writer.write("start".getBytes());
+                writer.write("\r\n".getBytes());
+                writer.write("end".getBytes());
+                writer.write("\r\n".getBytes());
+                return;
             }
-            pw.close();
 
+            for (User entry : users)
+            {
+                String firstName = entry.getFirstName();
+                String lastName = entry.getLastName() ;
+                Date birthDate = entry.getBirthDate();
+                boolean isMale = entry.isMale();
+                User.Country country = entry.getCountry();
+                if (!isFirst) {
+                    writer.write("\r\n".getBytes());
+
+                } else {
+                    writer.write("start".getBytes());
+                    writer.write("\r\n".getBytes());
+                    isFirst = false;
+                }
+                writer.write((firstName != null) ? firstName.getBytes() : "empty".getBytes());
+                writer.write("\r\n".getBytes());
+                writer.write((lastName != null) ? lastName.getBytes() : "empty".getBytes());
+                writer.write("\r\n".getBytes());
+                writer.write((birthDate != null) ? String.valueOf(birthDate.getTime()).getBytes() : "empty".getBytes());
+                writer.write("\r\n".getBytes());
+                writer.write(isMale ? "male".getBytes() : "female".getBytes());
+                writer.write("\r\n".getBytes());
+                writer.write((country != null) ? country.toString().getBytes() : "empty".getBytes());
+            }
+            writer.write("\r\n".getBytes());
+            writer.write("end".getBytes());
+            writer.write("\r\n".getBytes());
         }
 
         public void load(InputStream inputStream) throws Exception {
-            //implement this method - реализуйте этот метод
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            String fName = reader.readLine();
-            String lName = reader.readLine();
-            long birthday = Long.valueOf(reader.readLine());
-            boolean male = Boolean.parseBoolean(reader.readLine());
-            String country = reader.readLine();
+            DataInputStream reader = new DataInputStream(inputStream);
+            int ourLines = 0;
 
-            User user = new User();
-            user.setFirstName(fName);
-            user.setLastName(lName);
-            user.setBirthDate(new Date(birthday));
-            user.setMale(male);
-            if(country.equals("Ukraine")){
-                user.setCountry(User.Country.UKRAINE);
-            } else if(country.equals("Russia")){
-                user.setCountry(User.Country.RUSSIA);
-            } else {
-                user.setCountry(User.Country.OTHER);
+            while (true)
+            {
+                String line = reader.readLine();
+                if ("start".equals(line)) {
+                    line = reader.readLine();
+                    ourLines++;
+                }
+                User user = new User();
+                if (ourLines == 1 && !"end".equals(line))
+                {
+
+                    user.setFirstName("empty".equals(line) ? null : line);
+                    line = reader.readLine();
+                    user.setLastName("empty".equals(line) ? null : line);
+                    line = reader.readLine();
+                    user.setBirthDate("empty".equals(line) ? null : new Date(Long.parseLong(line)));
+                    line = reader.readLine();
+                    user.setMale("male".equals(line) ? true : false);
+                    line = reader.readLine();
+                    user.setCountry("empty".equals(line) ? null : User.Country.valueOf(line));
+                } else break;
+                users.add(user);
             }
-            users.add(user);
-            }
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            JavaRush javaRush = (JavaRush) o;
+
+            return users != null ? users.equals(javaRush.users) : javaRush.users == null;
 
         }
 
+        @Override
+        public int hashCode() {
+            return users != null ? users.hashCode() : 0;
+        }
     }
-
+}

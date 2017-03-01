@@ -10,10 +10,10 @@ import java.util.List;
 */
 
 public class Solution {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         //исправь outputStream/inputStream в соответствии с путем к твоему реальному файлу
-//        try {
-            File your_file_name = File.createTempFile("/Users/Tanya/name.txt", null);
+        try {
+            File your_file_name = File.createTempFile("your_file_name", null);
             OutputStream outputStream = new FileOutputStream(your_file_name);
             InputStream inputStream = new FileInputStream(your_file_name);
 
@@ -27,13 +27,13 @@ public class Solution {
             System.out.println(ivanov.equals(somePerson));
             inputStream.close();
 
-//        } catch (IOException e) {
-//            //e.printStackTrace();
-//            System.out.println("Oops, something wrong with my file");
-//        } catch (Exception e) {
-//            //e.printStackTrace();
-//            System.out.println("Oops, something wrong with save/load method");
-//        }
+        } catch (IOException e) {
+            //e.printStackTrace();
+            System.out.println("Oops, something wrong with my file");
+        } catch (Exception e) {
+            //e.printStackTrace();
+            System.out.println("Oops, something wrong with save/load method");
+        }
     }
 
     public static class Human {
@@ -46,8 +46,8 @@ public class Solution {
             if (o == null || getClass() != o.getClass()) return false;
 
             Human human = (Human) o;
-
-            if (name == null ? !name.equals(human.name) : human.name != null) return false;
+            //first fail
+            if (name != null ? !name.equals(human.name) : human.name != null) return false;
             return assets != null ? assets.equals(human.assets) : human.assets == null;
 
         }
@@ -56,7 +56,8 @@ public class Solution {
         public int hashCode() {
             int result = name != null ? name.hashCode() : 0;
             result = 31 * result + (assets != null ? assets.hashCode() : 0);
-            return (int) (Math.random() * 100);
+            // second fail
+            return result;
         }
 
         public Human() {
@@ -83,7 +84,6 @@ public class Solution {
         public void load(InputStream inputStream) throws Exception {
             //implement this method - реализуйте этот метод
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
             this.name = reader.readLine();
             String assetName;
             while ((assetName = reader.readLine()) != null)
