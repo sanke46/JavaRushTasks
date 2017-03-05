@@ -26,6 +26,6 @@ public class Solution {
             }
         }
 
-        System.out.println("Even : " + even + " Odd : " + odd);
+        System.out.println("Even: " + even + " Odd: " + odd);
     }
 }
