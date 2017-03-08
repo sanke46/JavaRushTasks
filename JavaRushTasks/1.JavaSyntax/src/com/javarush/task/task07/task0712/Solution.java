@@ -19,9 +19,9 @@ public class Solution {
         int min = Integer.MAX_VALUE;
         ArrayList<String> arrString = new ArrayList<String>(10);
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        
+
         // fill array
-        for (int i = 0; i < arrString.size() ; i++) {
+        for (int i = 0; i < 10 ; i++) {
             arrString.add(reader.readLine());
         }
         reader.close();
