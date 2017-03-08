@@ -10,6 +10,7 @@ import java.util.Map;
 
 public class Solution {
     public static HashMap<String, Integer> createMap() {
+
         //напишите тут ваш код
         HashMap<String, Integer> map = new HashMap<>();
         map.put("Иван1",100);
@@ -27,9 +28,8 @@ public class Solution {
     }
 
     public static void removeItemFromMap(HashMap<String, Integer> map) {
+
         //напишите тут ваш код
-
-
         for(Iterator< Map.Entry<String , Integer>> it = map.entrySet().iterator(); it.hasNext();){
             Map.Entry<String, Integer> entry = it.next();
             if(entry.getValue() < 500){
