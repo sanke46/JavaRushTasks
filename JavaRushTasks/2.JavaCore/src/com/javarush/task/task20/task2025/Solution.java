@@ -6,6 +6,7 @@ package com.javarush.task.task20.task2025;
 public class Solution {
     public static long[] getNumbers(long N) {
         long[] result = null;
+
         return result;
     }
 
