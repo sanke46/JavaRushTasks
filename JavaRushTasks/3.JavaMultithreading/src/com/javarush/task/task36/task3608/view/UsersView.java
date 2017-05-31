@@ -9,6 +9,7 @@ import com.javarush.task.task36.task3608.model.ModelData;
  */
 public class UsersView implements View{
     private Controller controller;
+    private User EditUserView;
 
     public void refresh(ModelData modelData){
         System.out.println("All users:");
@@ -26,5 +27,18 @@ public class UsersView implements View{
 
     public void fireEventShowAllUsers(){
         controller.onShowAllUsers();
+    }
+
+    public void fireEventShowDeletedUsers() {
+        controller.onShowAllDeletedUsers();
+    }
+
+    public void setEditUserView(User editUserView) {
+        EditUserView = editUserView;
+    }
+
+    //getter
+    public User getEditUserView() {
+        return EditUserView;
     }
 }
