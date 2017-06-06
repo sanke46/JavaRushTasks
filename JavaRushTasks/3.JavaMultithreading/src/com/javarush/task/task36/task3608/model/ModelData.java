@@ -6,36 +6,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by ilafedoseev on 23.05.17.
+ * Created by ilafedoseev on 06.06.17.
  */
 public class ModelData {
-    private List<User> users;
+    private List<User> users = new ArrayList<>();
     private User activeUser;
     private boolean displayDeletedUserList;
 
-    //getter
     public List<User> getUsers() {
         return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     public User getActiveUser() {
         return activeUser;
     }
 
-    public boolean getDispalyDeletedUserList(){
-        return displayDeletedUserList;
-    }
-
-    //setter
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
     public void setActiveUser(User activeUser) {
         this.activeUser = activeUser;
     }
 
-    public void setDisplayDeletedUserList(boolean displayDeletedUserList){
+    public boolean isDisplayDeletedUserList() {
+        return displayDeletedUserList;
+    }
+
+    public void setDisplayDeletedUserList(boolean displayDeletedUserList) {
         this.displayDeletedUserList = displayDeletedUserList;
     }
+
 }
