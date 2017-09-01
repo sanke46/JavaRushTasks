@@ -26,7 +26,26 @@ public class View extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        switch (e.getActionCommand()) {
+            case "Новый" :
+                controller.createNewDocument();
+                break;
+            case "Открыть" :
+                controller.openDocument();
+                break;
+            case "Сохранить" :
+                controller.saveDocument();
+                break;
+            case "Сохранить как..." :
+                controller.saveDocumentAs();
+                break;
+            case "Выход" :
+                controller.exit();
+                break;
+            case "О программе" :
+                showAbout();
+                break;
+        }
     }
 
     public View() {
@@ -95,7 +114,7 @@ public class View extends JFrame implements ActionListener {
     public void undo() {
         try {
             undoManager.undo();
-        } catch (CannotUndoException e){
+        } catch (CannotUndoException e) {
             ExceptionHandler.log(e);
         }
     }
@@ -109,11 +128,17 @@ public class View extends JFrame implements ActionListener {
     }
 
     public void selectedTabChanged() {
+        if (tabbedPane.getSelectedIndex() == 0) {
+            controller.setPlainText(plainTextPane.getText());
+        } else if (tabbedPane.getSelectedIndex() == 1) {
+            plainTextPane.setText(controller.getPlainText());
+        }
 
+        resetUndo();
     }
 
     public void showAbout() {
-        JOptionPane.showMessageDialog(this.getContentPane(),"ShitSoft Corp. beta 0.1","HTML Editor",JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this.getContentPane(), "ShitSoft Corp. beta 0.1", "HTML Editor", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void selectHtmlTab() {
