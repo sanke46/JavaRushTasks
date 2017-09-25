@@ -20,4 +20,17 @@ public class Order {
         if (dishes.isEmpty()) return "";
         else return "Your order: " + dishes + " of " + tablet;
     }
+
+    public boolean isEmpty(){
+        return dishes.isEmpty();
+    }
+
+    public int getTotalCookingTime() {
+        int resultTime = 0;
+        for(Dish d : dishes) {
+            resultTime += d.getDuration();
+        }
+
+        return resultTime;
+    }
 }
