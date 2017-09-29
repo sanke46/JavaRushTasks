@@ -48,4 +48,8 @@ public class Advertisement {
         }
         hits--;
     }
+
+    public long getOneSecondCostInThousandsParts(){
+        return (long) (amountPerOneDisplaying*(1000/(double)duration));
+    }
 }
